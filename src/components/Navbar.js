@@ -1,37 +1,33 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { HiMenuAlt4, HiX } from 'react-icons/hi';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../context/ThemeContext';
 
 const links = [
-  { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'contact', label: 'Contact' },
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/contact', label: 'Contact' },
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState('home');
   const { darkMode, toggleTheme } = useTheme();
+  const { pathname } = useLocation();
+
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-      for (let i = links.length - 1; i >= 0; i--) {
-        const el = document.getElementById(links[i].id);
-        if (el && el.getBoundingClientRect().top <= 100) {
-          setActive(links[i].id);
-          break;
-        }
-      }
-    };
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   return (
     <motion.nav
@@ -42,39 +38,51 @@ export default function Navbar() {
         scrolled ? 'glass border-b border-navy-100/50 dark:border-navy-800/50 shadow-sm shadow-navy-900/[0.03]' : ''
       }`}
     >
-      <div className="mx-auto max-w-6xl px-5 flex items-center justify-between h-16">
+      <div className="mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
         {/* Logo */}
-        <motion.a
-          href="#home"
-          className="font-mono font-bold text-sm text-navy-800 dark:text-white hover:text-brand-500 transition-colors"
-          whileHover={{ scale: 1.08 }}
+        <motion.div
+          whileHover={{ scale: 1.08, filter: 'drop-shadow(0 0 8px rgba(250, 204, 21, 0.4))' }}
           whileTap={{ scale: 0.95 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
         >
-          <span className="text-brand-500">$</span> java.dev
-        </motion.a>
+          <Link
+            to="/"
+            className="flex items-center gap-2 font-bold text-sm text-navy-800 dark:text-white transition-colors"
+          >
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#191E38] text-white text-xs font-bold leading-none">
+              H<span className="text-[#facc15]">A</span>
+            </span>
+            <span className="font-mono text-sm">
+              <span className="text-brand-500">$</span> java.dev
+            </span>
+          </Link>
+        </motion.div>
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-0.5">
-          {links.map(({ id, label }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              className={`relative px-3.5 py-1.5 text-[13px] font-medium rounded-lg transition-colors ${
-                active === id
-                  ? 'text-brand-600 dark:text-brand-400'
-                  : 'text-navy-500 dark:text-navy-300 hover:text-navy-800 dark:hover:text-white'
-              }`}
-            >
-              {label}
-              {active === id && (
-                <motion.span
-                  layoutId="nav-pill"
-                  className="absolute inset-0 rounded-lg bg-brand-500/[0.08] dark:bg-brand-500/[0.12] -z-10"
-                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                />
-              )}
-            </a>
-          ))}
+          {links.map(({ to, label }) => {
+            const isActive = pathname === to;
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`relative px-3.5 py-1.5 text-[13px] font-medium rounded-lg transition-colors ${
+                  isActive
+                    ? 'text-brand-600 dark:text-brand-400'
+                    : 'text-navy-500 dark:text-navy-300 hover:text-navy-800 dark:hover:text-white'
+                }`}
+              >
+                {label}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 rounded-lg bg-brand-500/[0.08] dark:bg-brand-500/[0.12] -z-10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
           <div className="w-px h-5 bg-navy-200 dark:bg-navy-700 mx-2" />
           <motion.button
             onClick={toggleTheme}
@@ -138,24 +146,29 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="md:hidden overflow-hidden glass border-t border-navy-100 dark:border-navy-800"
           >
-            <div className="px-5 py-3 space-y-1">
-              {links.map(({ id, label }, i) => (
-                <motion.a
-                  key={id}
-                  href={`#${id}`}
-                  onClick={() => setOpen(false)}
-                  className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    active === id
-                      ? 'text-brand-600 bg-brand-500/[0.08]'
-                      : 'text-navy-600 dark:text-navy-300'
-                  }`}
-                  initial={{ opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                >
-                  {label}
-                </motion.a>
-              ))}
+            <div className="px-4 sm:px-6 lg:px-8 py-3 space-y-1">
+              {links.map(({ to, label }, i) => {
+                const isActive = pathname === to;
+                return (
+                  <motion.div
+                    key={to}
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                  >
+                    <Link
+                      to={to}
+                      className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        isActive
+                          ? 'text-brand-600 bg-brand-500/[0.08]'
+                          : 'text-navy-600 dark:text-navy-300'
+                      }`}
+                    >
+                      {label}
+                    </Link>
+                  </motion.div>
+                );
+              })}
             </div>
           </motion.div>
         )}

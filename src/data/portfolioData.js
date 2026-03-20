@@ -6,7 +6,7 @@ export const profile = {
   location: 'Bengaluru, India',
   github: 'https://github.com/Honnur6268',
   linkedin: 'https://www.linkedin.com/in/honnur-ali',
-  resumeUrl: '#',
+  resumeUrl: 'https://honnur-portfolio-bucket.s3.ap-south-1.amazonaws.com/Honnur-Ali_Resume.pdf',
   about: `Backend engineer with 4+ years of experience building production-grade distributed systems.
 I specialize in Java and Spring Boot ecosystems — designing microservices, event-driven architectures
 with Kafka, and deploying cloud-native applications on AWS. I care deeply about clean architecture,
@@ -59,28 +59,73 @@ export const skills = [
   },
 ];
 
-export const projects = [
+export const workProjects = [
   {
-    title: 'UPI Payment Switch',
-    desc: 'High-throughput payment processing backend handling 10K+ TPS with fault-tolerant architecture, retry mechanisms, and real-time monitoring.',
-    tech: ['Java', 'Spring Boot', 'Kafka', 'Redis', 'MySQL'],
-    github: 'https://github.com',
-    demo: null,
+    title: 'Perkle Voucher System',
+    desc: 'Backend system for voucher generation, validation, and redemption powering digital reward campaigns.',
+    tech: ['Java', 'Spring Boot', 'MongoDB', 'REST APIs'],
+    contributions: [
+      'Built voucher generation and redemption APIs',
+      'Designed scalable backend logic for high-volume processing',
+      'Integrated vendor-based mapping system for multi-tenant support',
+    ],
   },
   {
-    title: 'Voucher Management Platform',
-    desc: 'End-to-end voucher lifecycle management — generation, validation, redemption — with secure APIs and analytics.',
-    tech: ['Spring Boot', 'MongoDB', 'REST APIs', 'Docker'],
-    github: 'https://github.com',
-    demo: null,
+    title: 'Equitas VAN Validation',
+    desc: 'Validation system for virtual account number transactions ensuring secure and accurate payment processing.',
+    tech: ['Java', 'Spring Boot', 'REST APIs'],
+    contributions: [
+      'Implementing validation logic for virtual account numbers',
+      'Handling transaction verification pipelines',
+      'Ensuring secure API processing with error handling',
+    ],
   },
   {
-    title: 'Merchant Acquirer Switch',
-    desc: 'Transaction routing engine with Kafka-based event processing, merchant onboarding flows, and PCI DSS compliance.',
-    tech: ['Java', 'Kafka', 'Spring Boot', 'Redis', 'AWS'],
-    github: 'https://github.com',
-    demo: null,
-  }
+    title: 'UPI Merchant Acquirer Switch',
+    desc: 'High-performance transaction routing system for UPI payments with event-driven architecture.',
+    tech: ['Java', 'Spring Boot', 'Kafka', 'Redis'],
+    contributions: [
+      'Built merchant routing logic for transaction switching',
+      'Implemented validation and processing pipelines',
+      'Worked on high-throughput transaction flow with Kafka events',
+    ],
+  },
+  {
+    title: 'Merchant Management System',
+    desc: 'Backend system for managing merchants, configurations, and onboarding flows built with Rust.',
+    tech: ['Rust', 'Cargo'],
+    contributions: [
+      'Developed secure APIs in Rust for merchant operations',
+      'Implemented business logic for merchant lifecycle',
+      'Improved system performance with zero-cost abstractions',
+    ],
+  },
+];
+
+export const personalProjects = [
+  {
+    title: 'Online Reservation System',
+    desc: 'Web application where passengers can book tickets online and perform payment operations using debit cards and net banking.',
+    tech: ['Java', 'JSP', 'Servlets', 'JSTL', 'MySQL'],
+    contributions: [
+      'Online ticket booking with seat selection',
+      'Payment gateway integration (Debit card & Net banking)',
+      'User authentication and booking history',
+    ],
+  },
+];
+
+export const academicProjects = [
+  {
+    title: 'IoT Fall Detection System',
+    desc: 'IoT application that detects falls using accelerometer and gyroscope, sending emergency alerts to predefined contacts.',
+    tech: ['Arduino', 'Accelerometer', 'Gyroscope', 'Firebase'],
+    contributions: [
+      'Real-time fall detection using sensor data',
+      'Emergency notification/call to predefined contacts',
+      'Firebase integration for data storage and alerts',
+    ],
+  },
 ];
 
 export const experiences = [
@@ -119,3 +164,28 @@ export const experiences = [
     ],
   }
 ];
+
+export const certifications = [
+  {
+    title: 'Oracle Certified Associate',
+    subtitle: 'Java SE 8 Programmer',
+    org: 'Oracle',
+    type: 'certification',
+    icon: 'oracle',
+  },
+  {
+    title: 'Java Microservices',
+    subtitle: 'Microservices Architecture with Spring Boot',
+    org: 'AXYYA Digital',
+    type: 'certification',
+    icon: 'microservices',
+  },
+];
+
+export const internship = {
+  title: 'Internet of Things',
+  subtitle: 'IoT Development & Applications',
+  org: 'Knowx Private Ltd, Bangalore',
+  type: 'internship',
+  icon: 'iot',
+};

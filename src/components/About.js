@@ -1,7 +1,8 @@
 import { useRef } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiServer, FiLayers, FiCode, FiTrendingUp } from 'react-icons/fi';
 import { fadeLeft, fadeRight, stagger, staggerScaleChild } from '../utils/animations';
+import useSectionAnimation from '../hooks/useSectionAnimation';
 import useAnimatedCounter from '../hooks/useAnimatedCounter';
 import SectionHeading from './SectionHeading';
 import { profile } from '../data/portfolioData';
@@ -35,11 +36,11 @@ function Stat({ value, label }) {
 }
 
 export default function About() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-80px' });
+  const scrollRef = useRef(null);
+  const [sectionRef, , inView] = useSectionAnimation('-80px');
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: scrollRef,
     offset: ['start end', 'end start'],
   });
   const avatarY = useTransform(scrollYProgress, [0, 1], [50, -50]);
@@ -47,22 +48,53 @@ export default function About() {
   const decorScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.05, 0.95]);
 
   return (
-    <section id="about" className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-navy-50/50 dark:bg-navy-900/60 section-dark-alt overflow-hidden" ref={ref}>
-      {/* Subtle background */}
+    <section
+      id="about"
+      className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-navy-50/50 dark:bg-navy-900/60 section-dark-alt overflow-hidden"
+      ref={(el) => { sectionRef.current = el; scrollRef.current = el; }}
+    >
+      {/* Background — slow rotating geometric shapes + parallax layers */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute top-20 right-10 w-[200px] sm:w-[300px] 2xl:w-[400px] h-[200px] sm:h-[300px] 2xl:h-[400px] bg-brand-200/15 dark:bg-brand-500/[0.04] blur-3xl animate-morph"
           animate={{ x: [0, 20, -10, 0], y: [0, -15, 10, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
+        {/* Rotating geometric shape */}
+        <motion.div
+          className="absolute bottom-20 left-20 w-32 h-32 sm:w-48 sm:h-48 border border-brand-300/10 dark:border-brand-500/[0.06] rounded-3xl hidden sm:block"
+          animate={{ rotate: [0, 360] }}
+          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+        />
+        <motion.div
+          className="absolute top-1/3 right-1/4 w-20 h-20 sm:w-28 sm:h-28 border border-navy-300/10 dark:border-navy-600/10 rounded-full hidden sm:block"
+          animate={{ rotate: [360, 0] }}
+          transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+        />
+        {/* Parallax floating dots */}
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1.5 h-1.5 rounded-full bg-brand-400/20 dark:bg-brand-400/10 hidden sm:block"
+            style={{ left: `${20 + i * 30}%`, top: `${30 + i * 15}%` }}
+            animate={{ y: [0, -20, 0], x: [0, 10 * (i % 2 === 0 ? 1 : -1), 0] }}
+            transition={{ duration: 8 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 1.5 }}
+          />
+        ))}
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-5">
+      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="// about" title="A bit about me" />
 
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 2xl:gap-20 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-14 2xl:gap-20 items-center">
           {/* Parallax Avatar */}
-          <motion.div className="flex justify-center" variants={fadeLeft} initial="hidden" animate={inView ? 'show' : 'hidden'} custom={0.2}>
+          <motion.div
+            className="flex justify-center"
+            variants={fadeLeft}
+            initial="hidden"
+            animate={inView ? 'show' : 'hidden'}
+            custom={0.2}
+          >
             <div className="relative">
               <motion.div
                 className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 2xl:w-72 2xl:h-72 rounded-2xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-600 flex items-center justify-center text-white text-5xl sm:text-6xl 2xl:text-7xl font-bold shadow-2xl shadow-brand-500/20 dark:shadow-brand-500/10"
@@ -120,7 +152,6 @@ export default function About() {
                     className="gradient-border p-3 sm:p-4 2xl:p-5 rounded-xl border border-navy-200/70 dark:border-navy-700/30 bg-white dark:bg-navy-800/50 group overflow-hidden relative"
                     whileHover={{ y: -8, scale: 1.03 }}
                   >
-                    {/* Hover gradient */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${accents[i]} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
                     <motion.div
                       className="relative"
@@ -146,10 +177,7 @@ export default function About() {
           variants={stagger(0.12, 0.7)}
         >
           {profile.stats.map(({ value, label }) => (
-            <motion.div
-              key={label}
-              variants={staggerScaleChild}
-            >
+            <motion.div key={label} variants={staggerScaleChild}>
               <Stat value={value} label={label} />
             </motion.div>
           ))}

@@ -6,7 +6,7 @@ import { experiences } from '../data/portfolioData';
 
 export default function Experience() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
+  const inView = useInView(ref, { once: false, margin: '-60px' });
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -16,41 +16,52 @@ export default function Experience() {
 
   return (
     <section id="experience" className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-white dark:bg-navy-900 overflow-hidden" ref={ref}>
-      {/* Subtle background */}
+      {/* Background — vertical glow pulse + floating elements */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute bottom-20 left-10 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-brand-200/10 dark:bg-brand-500/[0.04] blur-3xl"
           animate={{ x: [0, -20, 15, 0], y: [0, 15, -10, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         />
+        {/* Vertical light pulse traveling through the section */}
+        <motion.div
+          className="absolute left-[50px] sm:left-[80px] w-[1px] h-32 bg-gradient-to-b from-transparent via-brand-400/20 to-transparent hidden sm:block"
+          animate={{ top: ['-10%', '110%'] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute right-20 w-16 h-16 border border-brand-300/5 dark:border-brand-500/[0.03] rounded-full hidden lg:block"
+          animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+        />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-4xl 2xl:max-w-5xl 3xl:max-w-6xl px-5">
+      <div className="relative z-10 mx-auto max-w-4xl 2xl:max-w-5xl 3xl:max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="// experience" title="Where I've worked" />
 
         <div className="relative">
           {/* Scroll-driven timeline line */}
-          <div className="absolute left-[17px] sm:left-[17px] top-4 bottom-4 w-[2px] bg-navy-200/40 dark:bg-navy-700/20 rounded-full overflow-hidden">
+          <div className="absolute left-[17px] top-4 bottom-4 w-[2px] bg-navy-200/40 dark:bg-navy-700/20 rounded-full overflow-hidden">
             <motion.div
               className="w-full bg-gradient-to-b from-brand-500 via-brand-400 to-brand-300 rounded-full"
               style={{ height: lineHeight }}
             />
           </div>
 
-          <div className="space-y-8 sm:space-y-12">
+          <div className="space-y-6 sm:space-y-10 lg:space-y-12">
             {experiences.map(({ role, company, period, items }, idx) => (
               <motion.div
                 key={idx}
                 className="relative pl-12 sm:pl-14"
                 initial={{ opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
+                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: idx % 2 === 0 ? -40 : 40 }}
                 transition={{ delay: 0.2 + idx * 0.2, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
               >
                 {/* Timeline dot with glow */}
                 <motion.div
                   className="absolute left-[6px] top-2 w-[22px] h-[22px] rounded-full bg-brand-500 flex items-center justify-center z-10 ring-4 ring-white dark:ring-navy-900"
                   initial={{ scale: 0, rotate: -90 }}
-                  animate={inView ? { scale: 1, rotate: 0 } : {}}
+                  animate={inView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -90 }}
                   transition={{ delay: 0.3 + idx * 0.2, type: 'spring', stiffness: 350, damping: 15 }}
                   whileHover={{ scale: 1.5, boxShadow: '0 0 24px -3px rgba(234, 179, 8, 0.5)' }}
                 >
@@ -70,7 +81,7 @@ export default function Experience() {
                     <motion.span
                       className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1 text-[10px] sm:text-[11px] font-semibold rounded-lg bg-navy-100 dark:bg-navy-700/40 text-navy-500 dark:text-navy-300 border border-navy-200/50 dark:border-navy-600/20"
                       initial={{ opacity: 0, x: 15 }}
-                      animate={inView ? { opacity: 1, x: 0 } : {}}
+                      animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 15 }}
                       transition={{ delay: 0.5 + idx * 0.2 }}
                     >
                       <FiCalendar size={10} />
@@ -84,13 +95,13 @@ export default function Experience() {
                         key={i}
                         className="flex items-start gap-2.5 sm:gap-3 text-xs sm:text-sm text-navy-500 dark:text-navy-400 leading-relaxed"
                         initial={{ opacity: 0, x: -16 }}
-                        animate={inView ? { opacity: 1, x: 0 } : {}}
+                        animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
                         transition={{ delay: 0.55 + idx * 0.2 + i * 0.06, duration: 0.4 }}
                       >
                         <motion.span
                           className="mt-[7px] w-1.5 h-1.5 rounded-full bg-brand-500/50 flex-shrink-0"
                           initial={{ scale: 0 }}
-                          animate={inView ? { scale: 1 } : {}}
+                          animate={inView ? { scale: 1 } : { scale: 0 }}
                           transition={{ delay: 0.65 + idx * 0.2 + i * 0.06, type: 'spring', stiffness: 500 }}
                         />
                         {item}

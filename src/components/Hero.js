@@ -1,10 +1,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail } from 'react-icons/fi';
 import { FaJava } from 'react-icons/fa';
 import { SiSpringboot, SiApachekafka, SiDocker, SiKubernetes, SiRedis } from 'react-icons/si';
+import { Link } from 'react-router-dom';
 import { wordReveal, wordChild, stagger, staggerChild } from '../utils/animations';
 import { profile } from '../data/portfolioData';
+import ResumeButton from './ResumeButton';
 
 const cycleWords = ['Microservices', 'Scalable APIs', 'Distributed Systems', 'Event-Driven Architecture'];
 
@@ -99,42 +101,41 @@ export default function Hero() {
   const titleWords = `Hi, I'm ${profile.name}`.split(' ');
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center bg-white dark:bg-navy-900 overflow-hidden noise-overlay">
-      {/* Background layers */}
-      <div className="absolute inset-0 pointer-events-none">
-        {/* Dark mode gradient overlay */}
+    <section
+      id="home"
+      className="relative bg-white dark:bg-navy-900 noise-overlay lg:min-h-screen lg:flex lg:flex-col lg:justify-center"
+    >
+      {/* Background layers — contained so they never cause overflow */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="hidden dark:block absolute inset-0 bg-gradient-to-br from-navy-900 via-navy-900 to-navy-800/80" />
 
-        {/* Morphing gradient blobs */}
         <motion.div
-          className="absolute -top-32 -right-32 w-[350px] sm:w-[450px] lg:w-[550px] 2xl:w-[650px] h-[350px] sm:h-[450px] lg:h-[550px] 2xl:h-[650px] bg-brand-200/25 dark:bg-brand-500/[0.08] blur-3xl animate-morph"
+          className="absolute -top-32 -right-32 w-[250px] sm:w-[350px] lg:w-[550px] 2xl:w-[650px] h-[250px] sm:h-[350px] lg:h-[550px] 2xl:h-[650px] bg-brand-200/25 dark:bg-brand-500/[0.08] blur-3xl animate-morph"
           animate={{ x: [0, 40, -20, 0], y: [0, -30, 20, 0], scale: [1, 1.08, 0.95, 1] }}
           transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute -bottom-32 -left-32 w-[300px] sm:w-[400px] lg:w-[450px] 2xl:w-[550px] h-[300px] sm:h-[400px] lg:h-[450px] 2xl:h-[550px] bg-navy-200/30 dark:bg-brand-500/[0.04] blur-3xl animate-morph"
+          className="absolute -bottom-32 -left-32 w-[200px] sm:w-[300px] lg:w-[450px] 2xl:w-[550px] h-[200px] sm:h-[300px] lg:h-[450px] 2xl:h-[550px] bg-navy-200/30 dark:bg-brand-500/[0.04] blur-3xl animate-morph"
           style={{ animationDelay: '4s' }}
           animate={{ x: [0, -25, 20, 0], y: [0, 30, -15, 0], scale: [1, 0.93, 1.06, 1] }}
           transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
         />
         <motion.div
-          className="absolute top-1/3 left-1/3 w-[250px] lg:w-[350px] h-[250px] lg:h-[350px] bg-brand-300/8 dark:bg-accent-green/[0.03] blur-3xl"
+          className="absolute top-1/3 left-1/3 w-[150px] sm:w-[250px] lg:w-[350px] h-[150px] sm:h-[250px] lg:h-[350px] bg-brand-300/8 dark:bg-accent-green/[0.03] blur-3xl"
           animate={{ x: [0, -40, 30, 0], y: [0, 20, -30, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {/* Parallax dot grid */}
         <motion.div
           className="absolute inset-0 dot-grid text-navy-300/20 dark:text-navy-700/10"
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
         />
 
-        {/* Floating tech icons */}
         {floatingIcons.map(({ Icon, x: posX, y: posY, delay, size, color }, i) => (
           <motion.div
             key={i}
-            className={`absolute ${color} hidden sm:block`}
+            className={`absolute ${color} hidden md:block`}
             style={{ left: posX, top: posY }}
             initial={{ opacity: 0, scale: 0, rotate: -20 }}
             animate={{ opacity: 1, scale: 1, rotate: 0 }}
@@ -153,18 +154,18 @@ export default function Hero() {
           </motion.div>
         ))}
 
-        {/* Orbit rings */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:block">
           <div className="orbit-ring w-[500px] h-[500px] -ml-[250px] -mt-[250px] animate-spin-slower opacity-30" />
           <div className="orbit-ring w-[700px] h-[700px] -ml-[350px] -mt-[350px] animate-spin-slow opacity-15" />
         </div>
       </div>
 
-      <div className="relative z-[2] mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-5 w-full py-20 pt-24 sm:py-24 sm:pt-28 lg:py-24 lg:pt-28">
-        <div className="grid lg:grid-cols-5 gap-10 sm:gap-12 lg:gap-8 2xl:gap-16 items-center">
-          {/* Left — 3 cols */}
+      {/* Content */}
+      <div className="relative z-[2] mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8 w-full pt-24 pb-12 sm:pt-28 sm:pb-16 lg:pt-28 lg:pb-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-12 2xl:gap-16 items-center">
+
+          {/* Left — Text content */}
           <motion.div
-            className="lg:col-span-3"
             variants={stagger(0.1, 0.12)}
             initial="hidden"
             animate="show"
@@ -183,9 +184,9 @@ export default function Hero() {
               </motion.span>
             </motion.div>
 
-            {/* Heading with word-by-word blur reveal */}
+            {/* Heading */}
             <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl 2xl:text-[4rem] 3xl:text-7xl font-bold leading-[1.08] text-navy-900 dark:text-white flex flex-wrap gap-x-2 sm:gap-x-3"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] xl:text-6xl 2xl:text-[4rem] 3xl:text-7xl font-bold leading-[1.08] text-navy-900 dark:text-white flex flex-wrap gap-x-2 sm:gap-x-3"
               variants={wordReveal}
               initial="hidden"
               animate="show"
@@ -199,8 +200,8 @@ export default function Hero() {
 
             <motion.p
               className="mt-3 text-base sm:text-lg md:text-xl 2xl:text-2xl text-navy-500 dark:text-navy-300 font-medium"
-              initial={{ opacity: 0, y: 20, filter: 'blur(4px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
               {profile.role}
@@ -222,7 +223,7 @@ export default function Hero() {
 
             <motion.p
               className="mt-4 sm:mt-5 text-navy-500 dark:text-navy-400 max-w-lg 2xl:max-w-xl leading-relaxed text-sm sm:text-[15px] 2xl:text-base"
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.75, duration: 0.55 }}
             >
@@ -231,44 +232,34 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <motion.div
-              className="mt-6 sm:mt-8 flex flex-wrap gap-3"
-              initial={{ opacity: 0, y: 24 }}
+              className="mt-6 sm:mt-8 flex flex-wrap items-center gap-3"
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.85, duration: 0.5 }}
             >
-              <motion.a
-                href="#projects"
-                className="group relative px-5 sm:px-6 py-2.5 rounded-lg bg-navy-900 dark:bg-brand-500 text-white dark:text-navy-900 text-sm font-semibold overflow-hidden"
+              <motion.div
                 whileHover={{ y: -4, boxShadow: '0 16px 40px -10px rgba(234, 179, 8, 0.35)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                <span className="relative z-10">View Projects</span>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-brand-500/20 to-brand-400/20 dark:from-brand-600/30 dark:to-brand-400/30"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '0%' }}
-                  transition={{ duration: 0.35 }}
-                />
-              </motion.a>
-              <motion.a
-                href={profile.resumeUrl}
-                className="px-5 sm:px-6 py-2.5 rounded-lg border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-200 text-sm font-semibold flex items-center gap-2 hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 dark:hover:border-brand-500/40 transition-colors"
+                <Link
+                  to="/projects"
+                  className="group relative px-5 sm:px-6 py-2.5 rounded-lg bg-navy-900 dark:bg-brand-500 text-white dark:text-navy-900 text-sm font-semibold overflow-hidden inline-block"
+                >
+                  <span className="relative z-10">View Projects</span>
+                </Link>
+              </motion.div>
+              <ResumeButton />
+              <motion.div
                 whileHover={{ y: -4, boxShadow: '0 12px 30px -8px rgba(234, 179, 8, 0.15)' }}
                 whileTap={{ scale: 0.97 }}
               >
-                <motion.span animate={{ y: [0, -3, 0] }} transition={{ duration: 1.8, repeat: Infinity }}>
-                  <FiDownload size={14} />
-                </motion.span>
-                Resume
-              </motion.a>
-              <motion.a
-                href="#contact"
-                className="hidden sm:inline-flex px-5 sm:px-6 py-2.5 rounded-lg border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-200 text-sm font-semibold hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 dark:hover:border-brand-500/40 transition-colors"
-                whileHover={{ y: -4, boxShadow: '0 12px 30px -8px rgba(234, 179, 8, 0.15)' }}
-                whileTap={{ scale: 0.97 }}
-              >
-                Contact
-              </motion.a>
+                <Link
+                  to="/contact"
+                  className="hidden sm:inline-flex px-5 sm:px-6 py-2.5 rounded-lg border border-navy-200 dark:border-navy-700 text-navy-700 dark:text-navy-200 text-sm font-semibold hover:border-brand-400 hover:text-brand-600 dark:hover:text-brand-400 dark:hover:border-brand-500/40 transition-colors"
+                >
+                  Contact
+                </Link>
+              </motion.div>
             </motion.div>
 
             {/* Social icons */}
@@ -279,15 +270,14 @@ export default function Hero() {
               transition={{ delay: 1.05 }}
             >
               {[
-                { Icon: FiGithub, href: profile.github },
-                { Icon: FiLinkedin, href: profile.linkedin },
-                { Icon: FiMail, href: `mailto:${profile.email}` },
-              ].map(({ Icon, href }, i) => (
+                { Icon: FiGithub, href: profile.github, external: true },
+                { Icon: FiLinkedin, href: profile.linkedin, external: true },
+                { Icon: FiMail, href: `mailto:${profile.email}`, external: false },
+              ].map(({ Icon, href, external }, i) => (
                 <motion.a
                   key={i}
                   href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   className="p-2.5 rounded-xl border border-navy-200 dark:border-navy-700 text-navy-400 hover:text-brand-500 hover:border-brand-400 dark:hover:border-brand-500/40 transition-all"
                   whileHover={{ y: -5, scale: 1.12, boxShadow: '0 10px 24px -6px rgba(234, 179, 8, 0.18)' }}
                   whileTap={{ scale: 0.9 }}
@@ -301,68 +291,74 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Tilt code card */}
+          {/* Right — Code card */}
           <motion.div
-            className="lg:col-span-2 hidden lg:block perspective-1200 group"
-            initial={{ opacity: 0, y: 50, rotateY: -12, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, rotateY: 0, scale: 1 }}
-            transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full max-w-sm sm:max-w-md mx-auto lg:max-w-none"
+            initial={{ opacity: 0, y: 24, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <TiltCard>
-              <div className="rounded-xl border border-navy-700/60 dark:border-navy-700/40 bg-navy-900 dark:bg-navy-800/90 shadow-2xl shadow-navy-900/20 dark:shadow-black/50 overflow-hidden animate-glow-pulse">
-                {/* Title bar */}
-                <div className="flex items-center gap-2 px-4 py-2.5 border-b border-navy-700/50 dark:border-navy-700/30 bg-navy-800/50 dark:bg-navy-800/80">
-                  <motion.span className="w-3 h-3 rounded-full bg-red-400/80" whileHover={{ scale: 1.5, backgroundColor: '#f87171' }} />
-                  <motion.span className="w-3 h-3 rounded-full bg-yellow-400/80" whileHover={{ scale: 1.5, backgroundColor: '#facc15' }} />
-                  <motion.span className="w-3 h-3 rounded-full bg-green-400/80" whileHover={{ scale: 1.5, backgroundColor: '#4ade80' }} />
-                  <span className="ml-3 text-[11px] text-navy-500 font-mono">Developer.java</span>
-                </div>
-                {/* Code lines with staggered reveal */}
-                <div className="p-4 xl:p-5 font-mono text-[11px] xl:text-[12.5px] leading-[1.9] text-navy-300">
-                  {codeLines.map((line, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, x: -16, filter: 'blur(3px)' }}
-                      animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                      transition={{ delay: 0.9 + i * 0.07, duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className={line.content === null ? 'h-2' : ''}
-                      style={{ paddingLeft: line.indent * 6 }}
-                    >
-                      {line.content && (
-                        <>
-                          <span className="text-navy-600 select-none mr-4 text-[10px]">{String(i + 1).padStart(2, ' ')}</span>
-                          {line.content}
-                        </>
-                      )}
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </TiltCard>
+            {/* Desktop: tilt effect */}
+            <div className="hidden lg:block perspective-1200 group">
+              <TiltCard>
+                <CodeCardInner />
+              </TiltCard>
+            </div>
+            {/* Mobile/Tablet: gentle auto-tilt */}
+            <div className="lg:hidden" style={{ perspective: 800 }}>
+              <motion.div
+                animate={{
+                  rotateX: [0, 4, 4, -4, -4, 0],
+                  rotateY: [0, -6, 6, 6, -6, 0],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                }}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                <CodeCardInner />
+              </motion.div>
+            </div>
           </motion.div>
-        </div>
 
-        {/* Scroll indicator */}
-        <motion.a
-          href="#about"
-          className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-navy-300 dark:text-navy-500 group"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.6 }}
-          whileHover={{ scale: 1.15 }}
-        >
-          <span className="text-[9px] font-mono uppercase tracking-[0.25em] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            scroll
-          </span>
-          <motion.div className="w-5 h-8 rounded-full border border-navy-300 dark:border-navy-600 flex justify-center pt-1.5">
-            <motion.div
-              className="w-1 h-1.5 rounded-full bg-brand-500"
-              animate={{ y: [0, 8, 0], opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-            />
-          </motion.div>
-        </motion.a>
+        </div>
       </div>
     </section>
+  );
+}
+
+function CodeCardInner() {
+  return (
+    <div className="rounded-xl border border-navy-700/60 dark:border-navy-700/40 bg-navy-900 dark:bg-navy-800/90 shadow-2xl shadow-navy-900/20 dark:shadow-black/50 overflow-hidden animate-glow-pulse">
+      {/* Title bar */}
+      <div className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 border-b border-navy-700/50 dark:border-navy-700/30 bg-navy-800/50 dark:bg-navy-800/80">
+        <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400/80" />
+        <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400/80" />
+        <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400/80" />
+        <span className="ml-2 sm:ml-3 text-[10px] sm:text-[11px] text-navy-500 font-mono">Developer.java</span>
+      </div>
+      {/* Code lines — animate on mount */}
+      <div className="p-3 sm:p-4 xl:p-5 font-mono text-[10px] sm:text-[11px] xl:text-[12.5px] leading-[1.7] sm:leading-[1.9] text-navy-300">
+        {codeLines.map((line, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 + i * 0.06, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className={line.content === null ? 'h-1.5 sm:h-2' : ''}
+            style={{ paddingLeft: line.indent * 4 }}
+          >
+            {line.content && (
+              <>
+                <span className="text-navy-600 select-none mr-2 sm:mr-4 text-[9px] sm:text-[10px]">{String(i + 1).padStart(2, ' ')}</span>
+                {line.content}
+              </>
+            )}
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 }

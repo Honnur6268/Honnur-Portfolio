@@ -1,17 +1,22 @@
 import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiSend, FiCheck, FiLoader } from 'react-icons/fi';
+import { FiMail, FiMapPin, FiGithub, FiLinkedin, FiSend, FiCheck, FiLoader, FiAlertCircle } from 'react-icons/fi';
+import emailjs from '@emailjs/browser';
 import { fadeLeft, fadeRight } from '../utils/animations';
 import SectionHeading from './SectionHeading';
 import { profile } from '../data/portfolioData';
 
-function FloatField({ label, name, type = 'text', value, onChange, textarea, delay = 0, inView }) {
+const EMAILJS_SERVICE_ID = 'service_honnu6268';
+const EMAILJS_TEMPLATE_ID = 'template_yzswriw';
+const EMAILJS_PUBLIC_KEY = '5-6_R2nmtNxWkQGiX';
+
+function FloatField({ label, name, type = 'text', value, onChange, textarea, delay = 0, inView, error }) {
   const Tag = textarea ? 'textarea' : 'input';
   return (
     <motion.div
       className="float-label"
       initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
       transition={{ delay, duration: 0.45 }}
     >
       <Tag
@@ -22,32 +27,91 @@ function FloatField({ label, name, type = 'text', value, onChange, textarea, del
         required
         placeholder=" "
         rows={textarea ? 5 : undefined}
-        className="w-full px-4 py-3 rounded-xl border border-navy-200 dark:border-navy-700/50 bg-white dark:bg-navy-800/50 text-navy-900 dark:text-white text-sm outline-none transition-all focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 dark:focus:ring-brand-500/20 resize-none"
+        className={`w-full px-4 py-3 rounded-xl border bg-white dark:bg-navy-800/50 text-navy-900 dark:text-white text-sm outline-none transition-all resize-none ${
+          error
+            ? 'border-red-400 dark:border-red-500/60 focus:border-red-500 focus:ring-2 focus:ring-red-500/15'
+            : 'border-navy-200 dark:border-navy-700/50 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 dark:focus:ring-brand-500/20'
+        }`}
       />
       <label>{label}</label>
+      {error && (
+        <motion.p
+          initial={{ opacity: 0, y: -4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-[11px] text-red-500 dark:text-red-400 mt-1 ml-1"
+        >
+          {error}
+        </motion.p>
+      )}
     </motion.div>
   );
 }
 
+function validateForm({ name, email, message }) {
+  const errors = {};
+  if (!name.trim()) errors.name = 'Name is required';
+  if (!email.trim()) {
+    errors.email = 'Email is required';
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.email = 'Enter a valid email';
+  }
+  if (!message.trim()) {
+    errors.message = 'Message is required';
+  } else if (message.trim().length < 10) {
+    errors.message = 'Message must be at least 10 characters';
+  }
+  return errors;
+}
+
 export default function Contact() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-60px' });
+  const formRef = useRef(null);
+  const inView = useInView(ref, { once: false, margin: '-60px' });
   const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle');
+  const [errors, setErrors] = useState({});
+  const [status, setStatus] = useState('idle'); // idle | sending | sent | error
 
-  const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-  const onSubmit = (e) => {
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
+
+    const validationErrors = validateForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setErrors({});
     setStatus('sending');
-    setTimeout(() => {
+
+    try {
+      await emailjs.sendForm(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        EMAILJS_PUBLIC_KEY
+      );
       setStatus('sent');
-      setTimeout(() => { setStatus('idle'); setForm({ name: '', email: '', message: '' }); }, 2800);
-    }, 1200);
+      setTimeout(() => {
+        setStatus('idle');
+        setForm({ name: '', email: '', message: '' });
+      }, 3000);
+    } catch {
+      setStatus('error');
+      setTimeout(() => setStatus('idle'), 4000);
+    }
   };
 
   return (
     <section id="contact" className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-white dark:bg-navy-900 overflow-hidden" ref={ref}>
-      {/* Animated background gradient */}
+      {/* Background */}
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute top-1/4 right-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-brand-200/15 dark:bg-brand-500/[0.05] blur-3xl animate-morph"
@@ -59,14 +123,44 @@ export default function Contact() {
           animate={{ x: [0, 20, -10, 0], y: [0, -15, 20, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
         />
+        {[0, 1, 2].map((i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full hidden sm:block"
+            style={{
+              width: 6 + i * 2,
+              height: 6 + i * 2,
+              background: `rgba(234,179,8,${0.08 + i * 0.03})`,
+              left: `${25 + i * 25}%`,
+              top: `${20 + i * 20}%`,
+            }}
+            animate={{
+              y: [0, -(15 + i * 5), 0],
+              x: [0, (i % 2 === 0 ? 10 : -10), 0],
+              opacity: [0.3, 0.6, 0.3],
+            }}
+            transition={{ duration: 6 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i }}
+          />
+        ))}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-brand-500/[0.02] to-transparent dark:from-brand-500/[0.01]"
+          animate={{ opacity: [0.3, 0.7, 0.3] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-5">
+      <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8">
         <SectionHeading label="// contact" title="Let's work together" />
 
-        <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-10 2xl:gap-12">
+        <div className="grid lg:grid-cols-5 gap-6 sm:gap-8 lg:gap-10 2xl:gap-14">
           {/* Info */}
-          <motion.div className="lg:col-span-2" variants={fadeLeft} initial="hidden" animate={inView ? 'show' : 'hidden'} custom={0.2}>
+          <motion.div
+            className="lg:col-span-2"
+            variants={fadeLeft}
+            initial="hidden"
+            animate={inView ? 'show' : 'hidden'}
+            custom={0.2}
+          >
             <div className="gradient-border p-5 sm:p-6 md:p-8 2xl:p-10 rounded-xl border border-navy-200/70 dark:border-navy-700/30 bg-navy-50/40 dark:bg-navy-800/40 h-full">
               <h3 className="text-base sm:text-lg font-bold text-navy-800 dark:text-white mb-2">Get in touch</h3>
               <p className="text-xs sm:text-sm text-navy-500 dark:text-navy-400 leading-relaxed mb-6 sm:mb-8">
@@ -82,7 +176,7 @@ export default function Contact() {
                     key={label}
                     className="flex items-center gap-3"
                     initial={{ opacity: 0, x: -24 }}
-                    animate={inView ? { opacity: 1, x: 0 } : {}}
+                    animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
                     transition={{ delay: 0.4 + i * 0.12 }}
                   >
                     <motion.div
@@ -104,20 +198,19 @@ export default function Contact() {
                 <p className="text-[10px] uppercase tracking-wider text-navy-400 font-semibold mb-3">Connect</p>
                 <div className="flex gap-2.5">
                   {[
-                    { Icon: FiGithub, href: profile.github },
-                    { Icon: FiLinkedin, href: profile.linkedin },
-                    { Icon: FiMail, href: `mailto:${profile.email}` },
-                  ].map(({ Icon, href }, i) => (
+                    { Icon: FiGithub, href: profile.github, external: true },
+                    { Icon: FiLinkedin, href: profile.linkedin, external: true },
+                    { Icon: FiMail, href: `mailto:${profile.email}`, external: false },
+                  ].map(({ Icon, href, external }, i) => (
                     <motion.a
                       key={i}
                       href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-navy-700/50 border border-navy-200/70 dark:border-navy-600/20 flex items-center justify-center text-navy-400 hover:text-brand-500 hover:border-brand-300 dark:hover:border-brand-500/30 transition-all"
+                      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      className="relative z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-navy-700/50 border border-navy-200/70 dark:border-navy-600/20 flex items-center justify-center text-navy-400 hover:text-brand-500 hover:border-brand-300 dark:hover:border-brand-500/30 transition-all"
                       whileHover={{ y: -5, scale: 1.15, boxShadow: '0 10px 24px -6px rgba(234, 179, 8, 0.18)' }}
                       whileTap={{ scale: 0.9 }}
                       initial={{ opacity: 0, y: 12 }}
-                      animate={inView ? { opacity: 1, y: 0 } : {}}
+                      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
                       transition={{ delay: 0.65 + i * 0.08 }}
                     >
                       <Icon size={16} />
@@ -129,32 +222,42 @@ export default function Contact() {
           </motion.div>
 
           {/* Form */}
-          <motion.div className="lg:col-span-3" variants={fadeRight} initial="hidden" animate={inView ? 'show' : 'hidden'} custom={0.3}>
-            <form onSubmit={onSubmit} className="gradient-border p-5 sm:p-6 md:p-8 2xl:p-10 rounded-xl border border-navy-200/70 dark:border-navy-700/30 bg-navy-50/40 dark:bg-navy-800/40">
+          <motion.div
+            className="lg:col-span-3"
+            variants={fadeRight}
+            initial="hidden"
+            animate={inView ? 'show' : 'hidden'}
+            custom={0.3}
+          >
+            <form
+              ref={formRef}
+              onSubmit={onSubmit}
+              className="gradient-border p-5 sm:p-6 md:p-8 2xl:p-10 rounded-xl border border-navy-200/70 dark:border-navy-700/30 bg-navy-50/40 dark:bg-navy-800/40"
+            >
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
-                <FloatField label="Name" name="name" value={form.name} onChange={onChange} delay={0.35} inView={inView} />
-                <FloatField label="Email" name="email" type="email" value={form.email} onChange={onChange} delay={0.4} inView={inView} />
+                <FloatField label="Name" name="name" value={form.name} onChange={onChange} delay={0.35} inView={inView} error={errors.name} />
+                <FloatField label="Email" name="email" type="email" value={form.email} onChange={onChange} delay={0.4} inView={inView} error={errors.email} />
               </div>
               <div className="mb-5 sm:mb-6">
-                <FloatField label="Message" name="message" value={form.message} onChange={onChange} textarea delay={0.45} inView={inView} />
+                <FloatField label="Message" name="message" value={form.message} onChange={onChange} textarea delay={0.45} inView={inView} error={errors.message} />
               </div>
 
-              {/* Submit button with 3 states */}
               <motion.button
                 type="submit"
                 disabled={status !== 'idle'}
                 className={`w-full py-3 sm:py-3.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all relative overflow-hidden ${
                   status === 'sent'
                     ? 'bg-emerald-500 text-white'
+                    : status === 'error'
+                    ? 'bg-red-500 text-white'
                     : 'bg-navy-900 dark:bg-brand-500 text-white dark:text-navy-900 disabled:opacity-70'
                 }`}
                 whileHover={status === 'idle' ? { y: -3, boxShadow: '0 14px 35px -10px rgba(234, 179, 8, 0.3)' } : {}}
                 whileTap={status === 'idle' ? { scale: 0.98 } : {}}
                 initial={{ opacity: 0, y: 16 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
+                animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
                 transition={{ delay: 0.55 }}
               >
-                {/* Animated gradient sweep on hover */}
                 {status === 'idle' && (
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-brand-500/20 via-transparent to-brand-500/20"
@@ -194,6 +297,17 @@ export default function Contact() {
                         <FiCheck size={16} />
                       </motion.span>
                       Message Sent!
+                    </motion.span>
+                  ) : status === 'error' ? (
+                    <motion.span
+                      key="error"
+                      className="relative z-10 flex items-center gap-2"
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -12 }}
+                    >
+                      <FiAlertCircle size={15} />
+                      Failed to send. Try again.
                     </motion.span>
                   ) : (
                     <motion.span

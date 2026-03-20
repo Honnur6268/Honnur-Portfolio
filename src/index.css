@@ -45,6 +45,10 @@
     border-radius: 99px;
   }
 
+  /* Hide scrollbar but allow scroll */
+  .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
   /* Glow effects */
   .glow-brand {
     box-shadow: 0 0 24px -5px rgba(234, 179, 8, 0.25);
@@ -134,6 +138,7 @@
     opacity: 0;
     transition: opacity 0.4s ease;
     animation: shimmerBorder 3s ease-in-out infinite paused;
+    pointer-events: none;
   }
   .gradient-border:hover::before {
     opacity: 1;
