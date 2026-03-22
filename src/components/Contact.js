@@ -6,9 +6,9 @@ import { fadeLeft, fadeRight } from '../utils/animations';
 import SectionHeading from './SectionHeading';
 import { profile } from '../data/portfolioData';
 
-const EMAILJS_SERVICE_ID = 'service_honnu6268';
-const EMAILJS_TEMPLATE_ID = 'template_yzswriw';
-const EMAILJS_PUBLIC_KEY = '5-6_R2nmtNxWkQGiX';
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_honnu6268';
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_yzswriw';
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '5-6_R2nmtNxWkQGiX';
 
 const autoCompleteMap = { name: 'name', email: 'email' };
 
