@@ -1,4 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { memo } from 'react';
+import { motion } from 'framer-motion';
 import { FiZap, FiShield, FiRefreshCw, FiDatabase, FiTrendingUp, FiRadio } from 'react-icons/fi';
 import SectionHeading from './SectionHeading';
 
@@ -65,18 +66,18 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
 };
 
-function AchievementCard({ item }) {
+const AchievementCard = memo(function AchievementCard({ item }) {
   const { icon: Icon, title, desc, tech, accent, bg, glow } = item;
 
   return (
     <motion.div
       variants={cardVariants}
       className="group relative rounded-2xl border border-navy-200/60 dark:border-navy-700/30 bg-white dark:bg-navy-800/40 overflow-hidden hover-glow transition-shadow duration-300 hover:shadow-lg hover:shadow-brand-500/5"
-      whileHover={{ y: -8, scale: 1.03, transition: { duration: 0.25 } }}
+      whileHover={{ y: -5, scale: 1.02, transition: { duration: 0.3 } }}
     >
       {/* Hover gradient overlay */}
       <div
@@ -118,7 +119,7 @@ function AchievementCard({ item }) {
       </div>
     </motion.div>
   );
-}
+});
 
 export default function Achievements() {
   return (
@@ -127,11 +128,9 @@ export default function Achievements() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute -top-40 -right-40 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-gradient-to-br from-brand-200/8 to-indigo-200/8 dark:from-brand-500/[0.03] dark:to-indigo-500/[0.02] blur-2xl animate-morph"
-          style={{ willChange: 'transform' }}
         />
         <div
           className="absolute bottom-0 left-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-emerald-200/5 dark:bg-emerald-500/[0.02] blur-2xl"
-          style={{ willChange: 'transform' }}
         />
       </div>
 

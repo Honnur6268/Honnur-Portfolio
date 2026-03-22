@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from './context/ThemeContext';
@@ -10,10 +10,11 @@ import BackToTop from './components/BackToTop';
 import ScrollToTop from './components/ScrollToTop';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
-import ProjectsPage from './pages/ProjectsPage';
-import ContactPage from './pages/ContactPage';
+
+const HomePage = lazy(() => import('./pages/HomePage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -45,12 +46,14 @@ export default function App() {
 
               <Navbar />
               <main className="relative z-[2]">
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/projects" element={<ProjectsPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                </Routes>
+                <Suspense fallback={null}>
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/projects" element={<ProjectsPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                  </Routes>
+                </Suspense>
               </main>
               <Footer />
             </motion.div>

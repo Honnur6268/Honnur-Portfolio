@@ -23,9 +23,9 @@ export default function SectionHeading({ label, title }) {
       </motion.p>
       <motion.h2
         className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] 2xl:text-5xl font-bold text-navy-800 dark:text-white leading-tight"
-        initial={{ opacity: 0, y: 24, filter: 'blur(4px)' }}
-        animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 24, filter: 'blur(4px)' }}
-        transition={{ duration: 0.55, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: 24 }}
+        animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+        transition={{ duration: 0.5, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
       >
         {title}
       </motion.h2>

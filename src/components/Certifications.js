@@ -77,11 +77,9 @@ export default function Certifications() {
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute top-1/4 left-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-brand-200/8 dark:bg-brand-500/[0.03] blur-2xl animate-morph"
-          style={{ willChange: 'transform' }}
         />
         <div
           className="absolute bottom-1/4 right-0 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-indigo-200/6 dark:bg-indigo-500/[0.02] blur-2xl"
-          style={{ willChange: 'transform' }}
         />
 
         {/* floating icons */}

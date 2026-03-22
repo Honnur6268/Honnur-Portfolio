@@ -16,23 +16,13 @@ export default function Experience() {
 
   return (
     <section id="experience" className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-white dark:bg-navy-900 overflow-hidden" ref={ref}>
-      {/* Background — vertical glow pulse + floating elements */}
+      {/* Background — CSS-only, no JS-driven motion */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute bottom-20 left-10 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-brand-200/10 dark:bg-brand-500/[0.04] blur-3xl"
-          animate={{ x: [0, -20, 15, 0], y: [0, 15, -10, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        <div
+          className="absolute bottom-20 left-10 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-brand-200/10 dark:bg-brand-500/[0.04] blur-3xl animate-morph"
         />
-        {/* Vertical light pulse traveling through the section */}
-        <motion.div
-          className="absolute left-[50px] sm:left-[80px] w-[1px] h-32 bg-gradient-to-b from-transparent via-brand-400/20 to-transparent hidden sm:block"
-          animate={{ top: ['-10%', '110%'] }}
-          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute right-20 w-16 h-16 border border-brand-300/5 dark:border-brand-500/[0.03] rounded-full hidden lg:block"
-          animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+        <div
+          className="absolute right-20 w-16 h-16 border border-brand-300/5 dark:border-brand-500/[0.03] rounded-full hidden lg:block animate-spin-slower"
         />
       </div>
 
@@ -89,25 +79,22 @@ export default function Experience() {
                     </motion.span>
                   </div>
 
-                  <ul className="space-y-1.5 sm:space-y-2 mt-3 sm:mt-4">
+                  <motion.ul
+                    className="space-y-1.5 sm:space-y-2 mt-3 sm:mt-4"
+                    initial={{ opacity: 0 }}
+                    animate={inView ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ delay: 0.5 + idx * 0.2, duration: 0.4 }}
+                  >
                     {items.map((item, i) => (
-                      <motion.li
+                      <li
                         key={i}
                         className="flex items-start gap-2.5 sm:gap-3 text-xs sm:text-sm text-navy-500 dark:text-navy-400 leading-relaxed"
-                        initial={{ opacity: 0, x: -16 }}
-                        animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
-                        transition={{ delay: 0.55 + idx * 0.2 + i * 0.06, duration: 0.4 }}
                       >
-                        <motion.span
-                          className="mt-[7px] w-1.5 h-1.5 rounded-full bg-brand-500/50 flex-shrink-0"
-                          initial={{ scale: 0 }}
-                          animate={inView ? { scale: 1 } : { scale: 0 }}
-                          transition={{ delay: 0.65 + idx * 0.2 + i * 0.06, type: 'spring', stiffness: 500 }}
-                        />
+                        <span className="mt-[7px] w-1.5 h-1.5 rounded-full bg-brand-500/50 flex-shrink-0" />
                         {item}
-                      </motion.li>
+                      </li>
                     ))}
-                  </ul>
+                  </motion.ul>
                 </motion.div>
               </motion.div>
             ))}

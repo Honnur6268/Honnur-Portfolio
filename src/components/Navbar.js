@@ -118,7 +118,7 @@ export default function Navbar() {
           <motion.button
             onClick={() => setOpen(!open)}
             className="p-2 text-navy-500 dark:text-navy-300"
-            aria-label="Menu"
+            aria-label={open ? 'Close menu' : 'Open menu'}
             whileTap={{ scale: 0.85 }}
           >
             <AnimatePresence mode="wait">

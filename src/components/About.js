@@ -50,37 +50,21 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-navy-50/50 dark:bg-navy-900/60 section-dark-alt overflow-hidden"
+      className="relative pt-28 pb-20 sm:pt-32 sm:pb-24 lg:pt-36 lg:pb-32 2xl:pt-40 2xl:pb-36 bg-navy-50/50 dark:bg-navy-900/60 section-dark-alt overflow-hidden"
       ref={(el) => { sectionRef.current = el; scrollRef.current = el; }}
     >
-      {/* Background — slow rotating geometric shapes + parallax layers */}
+      {/* Background — CSS-only animations, no JS-driven motion */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
+        <div
           className="absolute top-20 right-10 w-[200px] sm:w-[300px] 2xl:w-[400px] h-[200px] sm:h-[300px] 2xl:h-[400px] bg-brand-200/15 dark:bg-brand-500/[0.04] blur-3xl animate-morph"
-          animate={{ x: [0, 20, -10, 0], y: [0, -15, 10, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
         />
-        {/* Rotating geometric shape */}
-        <motion.div
-          className="absolute bottom-20 left-20 w-32 h-32 sm:w-48 sm:h-48 border border-brand-300/10 dark:border-brand-500/[0.06] rounded-3xl hidden sm:block"
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
+        <div
+          className="absolute bottom-20 left-20 w-32 h-32 sm:w-48 sm:h-48 border border-brand-300/10 dark:border-brand-500/[0.06] rounded-3xl hidden sm:block animate-spin-slower"
         />
-        <motion.div
-          className="absolute top-1/3 right-1/4 w-20 h-20 sm:w-28 sm:h-28 border border-navy-300/10 dark:border-navy-600/10 rounded-full hidden sm:block"
-          animate={{ rotate: [360, 0] }}
-          transition={{ duration: 35, repeat: Infinity, ease: 'linear' }}
+        <div
+          className="absolute top-1/3 right-1/4 w-20 h-20 sm:w-28 sm:h-28 border border-navy-300/10 dark:border-navy-600/10 rounded-full hidden sm:block animate-spin-slow"
+          style={{ animationDirection: 'reverse' }}
         />
-        {/* Parallax floating dots */}
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1.5 h-1.5 rounded-full bg-brand-400/20 dark:bg-brand-400/10 hidden sm:block"
-            style={{ left: `${20 + i * 30}%`, top: `${30 + i * 15}%` }}
-            animate={{ y: [0, -20, 0], x: [0, 10 * (i % 2 === 0 ? 1 : -1), 0] }}
-            transition={{ duration: 8 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 1.5 }}
-          />
-        ))}
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -99,10 +83,10 @@ export default function About() {
               <motion.div
                 className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 2xl:w-72 2xl:h-72 rounded-2xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-600 flex items-center justify-center text-white text-5xl sm:text-6xl 2xl:text-7xl font-bold shadow-2xl shadow-brand-500/20 dark:shadow-brand-500/10"
                 style={{ y: avatarY, rotate: avatarRotate }}
-                whileHover={{ scale: 1.08, boxShadow: '0 30px 60px -15px rgba(234, 179, 8, 0.3)' }}
+                whileHover={{ scale: 1.04, boxShadow: '0 24px 50px -12px rgba(234, 179, 8, 0.25)' }}
                 transition={{ type: 'spring', stiffness: 200, damping: 18 }}
               >
-                JD
+                HA
               </motion.div>
               {/* Decorative ring */}
               <motion.div
@@ -126,7 +110,7 @@ export default function About() {
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
                 whileHover={{ scale: 1.15 }}
               >
-                15+ projects
+                5+ projects
               </motion.div>
             </div>
           </motion.div>

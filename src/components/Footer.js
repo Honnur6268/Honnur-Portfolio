@@ -22,13 +22,14 @@ export default function Footer() {
 
         <div className="flex items-center gap-3">
           {[
-            { Icon: FiGithub, href: profile.github, external: true },
-            { Icon: FiLinkedin, href: profile.linkedin, external: true },
-            { Icon: FiMail, href: `mailto:${profile.email}`, external: false },
-          ].map(({ Icon, href, external }, i) => (
+            { Icon: FiGithub, href: profile.github, external: true, label: 'GitHub' },
+            { Icon: FiLinkedin, href: profile.linkedin, external: true, label: 'LinkedIn' },
+            { Icon: FiMail, href: `mailto:${profile.email}`, external: false, label: 'Email' },
+          ].map(({ Icon, href, external, label }, i) => (
             <motion.a
               key={i}
               href={href}
+              aria-label={label}
               {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               className="text-navy-400 hover:text-brand-500 transition-colors"
               whileHover={{ y: -3, scale: 1.15 }}

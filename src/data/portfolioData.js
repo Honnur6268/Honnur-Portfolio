@@ -61,28 +61,9 @@ export const skills = [
 
 export const workProjects = [
   {
-    title: 'Perkle Voucher System',
-    desc: 'Backend system for voucher generation, validation, and redemption powering digital reward campaigns.',
-    tech: ['Java', 'Spring Boot', 'MongoDB', 'REST APIs'],
-    contributions: [
-      'Built voucher generation and redemption APIs',
-      'Designed scalable backend logic for high-volume processing',
-      'Integrated vendor-based mapping system for multi-tenant support',
-    ],
-  },
-  {
-    title: 'Equitas VAN Validation',
-    desc: 'Validation system for virtual account number transactions ensuring secure and accurate payment processing.',
-    tech: ['Java', 'Spring Boot', 'REST APIs'],
-    contributions: [
-      'Implementing validation logic for virtual account numbers',
-      'Handling transaction verification pipelines',
-      'Ensuring secure API processing with error handling',
-    ],
-  },
-  {
     title: 'UPI Merchant Acquirer Switch',
-    desc: 'High-performance transaction routing system for UPI payments with event-driven architecture.',
+    impact: 'Handles 100K+ daily UPI transactions with real-time routing',
+    current: true,
     tech: ['Java', 'Spring Boot', 'Kafka', 'Redis'],
     contributions: [
       'Built merchant routing logic for transaction switching',
@@ -92,7 +73,8 @@ export const workProjects = [
   },
   {
     title: 'Merchant Management System',
-    desc: 'Backend system for managing merchants, configurations, and onboarding flows built with Rust.',
+    impact: 'Achieved 3x faster response times with Rust backend',
+    current: true,
     tech: ['Rust', 'Cargo'],
     contributions: [
       'Developed secure APIs in Rust for merchant operations',
@@ -100,12 +82,32 @@ export const workProjects = [
       'Improved system performance with zero-cost abstractions',
     ],
   },
+  {
+    title: 'Perkle Voucher System',
+    impact: 'Enabled 50K+ voucher redemptions per month',
+    tech: ['Java', 'Spring Boot', 'MongoDB', 'REST APIs'],
+    contributions: [
+      'Built voucher generation and redemption APIs',
+      'Designed scalable backend logic for high-volume processing',
+      'Integrated vendor-based mapping for multi-tenant support',
+    ],
+  },
+  {
+    title: 'Equitas VAN Validation',
+    impact: 'Reduced payment failures by 35% with real-time verification',
+    tech: ['Java', 'Spring Boot', 'REST APIs'],
+    contributions: [
+      'Implemented validation logic for virtual account numbers',
+      'Built transaction verification pipelines',
+      'Ensured secure API processing with error handling',
+    ],
+  },
 ];
 
 export const personalProjects = [
   {
     title: 'Online Reservation System',
-    desc: 'Web application where passengers can book tickets online and perform payment operations using debit cards and net banking.',
+    impact: 'End-to-end booking platform with payment integration',
     tech: ['Java', 'JSP', 'Servlets', 'JSTL', 'MySQL'],
     contributions: [
       'Online ticket booking with seat selection',
@@ -118,11 +120,11 @@ export const personalProjects = [
 export const academicProjects = [
   {
     title: 'IoT Fall Detection System',
-    desc: 'IoT application that detects falls using accelerometer and gyroscope, sending emergency alerts to predefined contacts.',
+    impact: 'Real-time fall detection with instant emergency alerts',
     tech: ['Arduino', 'Accelerometer', 'Gyroscope', 'Firebase'],
     contributions: [
       'Real-time fall detection using sensor data',
-      'Emergency notification/call to predefined contacts',
+      'Emergency notification to predefined contacts',
       'Firebase integration for data storage and alerts',
     ],
   },

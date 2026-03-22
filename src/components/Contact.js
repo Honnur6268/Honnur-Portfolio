@@ -10,6 +10,8 @@ const EMAILJS_SERVICE_ID = 'service_honnu6268';
 const EMAILJS_TEMPLATE_ID = 'template_yzswriw';
 const EMAILJS_PUBLIC_KEY = '5-6_R2nmtNxWkQGiX';
 
+const autoCompleteMap = { name: 'name', email: 'email' };
+
 function FloatField({ label, name, type = 'text', value, onChange, textarea, delay = 0, inView, error }) {
   const Tag = textarea ? 'textarea' : 'input';
   return (
@@ -26,6 +28,7 @@ function FloatField({ label, name, type = 'text', value, onChange, textarea, del
         onChange={onChange}
         required
         placeholder=" "
+        autoComplete={autoCompleteMap[name] || 'off'}
         rows={textarea ? 5 : undefined}
         className={`w-full px-4 py-3 rounded-xl border bg-white dark:bg-navy-800/50 text-navy-900 dark:text-white text-sm outline-none transition-all resize-none ${
           error
@@ -110,43 +113,12 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-20 sm:py-24 lg:py-32 2xl:py-36 bg-white dark:bg-navy-900 overflow-hidden" ref={ref}>
-      {/* Background */}
+    <section id="contact" className="relative pt-28 pb-20 sm:pt-32 sm:pb-24 lg:pt-36 lg:pb-32 2xl:pt-40 2xl:pb-36 bg-white dark:bg-navy-900 overflow-hidden" ref={ref}>
+      {/* Background — CSS-only */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 right-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-brand-200/15 dark:bg-brand-500/[0.05] blur-3xl animate-morph"
-          animate={{ x: [0, -25, 15, 0], y: [0, 20, -15, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 left-0 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-navy-200/20 dark:bg-accent-green/[0.03] blur-3xl"
-          animate={{ x: [0, 20, -10, 0], y: [0, -15, 20, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        {[0, 1, 2].map((i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full hidden sm:block"
-            style={{
-              width: 6 + i * 2,
-              height: 6 + i * 2,
-              background: `rgba(234,179,8,${0.08 + i * 0.03})`,
-              left: `${25 + i * 25}%`,
-              top: `${20 + i * 20}%`,
-            }}
-            animate={{
-              y: [0, -(15 + i * 5), 0],
-              x: [0, (i % 2 === 0 ? 10 : -10), 0],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{ duration: 6 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i }}
-          />
-        ))}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-brand-500/[0.02] to-transparent dark:from-brand-500/[0.01]"
-          animate={{ opacity: [0.3, 0.7, 0.3] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        />
+        <div className="absolute top-1/4 right-0 w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-brand-200/15 dark:bg-brand-500/[0.05] blur-3xl animate-morph" />
+        <div className="absolute bottom-0 left-0 w-[250px] sm:w-[350px] h-[250px] sm:h-[350px] bg-navy-200/20 dark:bg-accent-green/[0.03] blur-3xl animate-morph" style={{ animationDelay: '5s' }} />
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-brand-500/[0.02] to-transparent dark:from-brand-500/[0.01]" />
       </div>
 
       <div className="relative z-10 mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8">
@@ -198,13 +170,14 @@ export default function Contact() {
                 <p className="text-[10px] uppercase tracking-wider text-navy-400 font-semibold mb-3">Connect</p>
                 <div className="flex gap-2.5">
                   {[
-                    { Icon: FiGithub, href: profile.github, external: true },
-                    { Icon: FiLinkedin, href: profile.linkedin, external: true },
-                    { Icon: FiMail, href: `mailto:${profile.email}`, external: false },
-                  ].map(({ Icon, href, external }, i) => (
+                    { Icon: FiGithub, href: profile.github, external: true, label: 'GitHub' },
+                    { Icon: FiLinkedin, href: profile.linkedin, external: true, label: 'LinkedIn' },
+                    { Icon: FiMail, href: `mailto:${profile.email}`, external: false, label: 'Email' },
+                  ].map(({ Icon, href, external, label }, i) => (
                     <motion.a
                       key={i}
                       href={href}
+                      aria-label={label}
                       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                       className="relative z-10 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white dark:bg-navy-700/50 border border-navy-200/70 dark:border-navy-600/20 flex items-center justify-center text-navy-400 hover:text-brand-500 hover:border-brand-300 dark:hover:border-brand-500/30 transition-all"
                       whileHover={{ y: -5, scale: 1.15, boxShadow: '0 10px 24px -6px rgba(234, 179, 8, 0.18)' }}
@@ -232,6 +205,7 @@ export default function Contact() {
             <form
               ref={formRef}
               onSubmit={onSubmit}
+              noValidate
               className="gradient-border p-5 sm:p-6 md:p-8 2xl:p-10 rounded-xl border border-navy-200/70 dark:border-navy-700/30 bg-navy-50/40 dark:bg-navy-800/40"
             >
               <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">

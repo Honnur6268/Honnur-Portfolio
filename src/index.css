@@ -211,3 +211,99 @@
 /* Typing cursor */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 .blink { animation: blink 0.7s step-end infinite; }
+
+/* ─── Hero mobile floating corner accents (pure CSS) ─── */
+@keyframes heroFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-6px, -10px); }
+}
+@keyframes heroFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(5px, -8px); }
+}
+@keyframes heroFloat3 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-4px, 8px); }
+}
+@keyframes heroFloat4 {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(6px, 10px); }
+}
+.animate-hero-float-1 { animation: heroFloat1 5s ease-in-out infinite; }
+.animate-hero-float-2 { animation: heroFloat2 6s ease-in-out infinite 0.5s; }
+.animate-hero-float-3 { animation: heroFloat3 7s ease-in-out infinite 1s; }
+.animate-hero-float-4 { animation: heroFloat4 5.5s ease-in-out infinite 0.8s; }
+
+/* ─── Code card auto-tilt for mobile (simulates desktop hover) ─── */
+@keyframes autoTilt {
+  0%    { transform: rotateX(0deg) rotateY(0deg); }
+  20%   { transform: rotateX(3deg) rotateY(-3deg); }   /* top-left */
+  40%   { transform: rotateX(3deg) rotateY(3deg); }    /* top-right */
+  60%   { transform: rotateX(-3deg) rotateY(3deg); }   /* bottom-right */
+  80%   { transform: rotateX(-3deg) rotateY(-3deg); }  /* bottom-left */
+  100%  { transform: rotateX(0deg) rotateY(0deg); }
+}
+.animate-auto-tilt {
+  animation: autoTilt 3s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+/* ─── Projects section background animations (pure CSS) ─── */
+
+/* Slow diagonal gradient sweep */
+@keyframes gradientSweep {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+.projects-gradient-sweep {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 179, 8, 0.03) 0%,
+    transparent 25%,
+    rgba(99, 102, 241, 0.025) 50%,
+    transparent 75%,
+    rgba(16, 185, 129, 0.02) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientSweep 20s ease-in-out infinite;
+}
+.dark .projects-gradient-sweep {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 179, 8, 0.015) 0%,
+    transparent 25%,
+    rgba(99, 102, 241, 0.012) 50%,
+    transparent 75%,
+    rgba(16, 185, 129, 0.01) 100%
+  );
+  background-size: 400% 400%;
+  animation: gradientSweep 20s ease-in-out infinite;
+}
+
+/* Soft radial glow pulse */
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50%      { opacity: 0.7; transform: scale(1.08); }
+}
+.projects-glow {
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: glowPulse 8s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+/* Slow orbiting accent dot */
+@keyframes orbitFloat {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(30px, -20px); }
+  50%  { transform: translate(-10px, -35px); }
+  75%  { transform: translate(-25px, 10px); }
+  100% { transform: translate(0, 0); }
+}
+.projects-float {
+  animation: orbitFloat 14s ease-in-out infinite;
+}
+.projects-float-alt {
+  animation: orbitFloat 18s ease-in-out infinite reverse;
+}
