@@ -103,9 +103,9 @@ const SkillCard = memo(function SkillCard({ name, pct, index, glow, textColor, b
 
 export default function Skills() {
   const sectionRef = useRef(null);
-  const gridRef = useRef(null);
-  // Single IntersectionObserver for the entire grid
-  const gridInView = useInView(gridRef, { once: false, margin: '-60px' });
+  const gridWrapperRef = useRef(null);
+  // Stable ref outside AnimatePresence so useInView doesn't lose track on tab switch
+  const gridInView = useInView(gridWrapperRef, { once: false, margin: '-40px', amount: 0.1 });
   const [activeCategory, setActiveCategory] = useState(null);
 
   const tabKey = activeCategory || 'all';
@@ -165,41 +165,42 @@ export default function Skills() {
           </div>
         </div>
 
-        {/* Skills grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={tabKey}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {filtered.length > 0 ? (
-              <motion.div
-                ref={gridRef}
-                className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 3xl:grid-cols-8 gap-2.5 sm:gap-3 md:gap-4"
-                variants={containerVariants}
-                initial="hidden"
-                animate="show"
-              >
-                {filtered.map((skill, i) => (
-                  <SkillCard
-                    key={`${tabKey}-${skill.name}`}
-                    name={skill.name}
-                    pct={skill.pct}
-                    index={i}
-                    glow={skill.glow}
-                    textColor={skill.textColor}
-                    barColor={skill.barColor}
-                    isVisible={gridInView}
-                  />
-                ))}
-              </motion.div>
-            ) : (
-              <p ref={gridRef} className="text-center text-sm text-navy-400 py-12">No skills in this category.</p>
-            )}
-          </motion.div>
-        </AnimatePresence>
+        {/* Skills grid — gridWrapperRef is stable (outside AnimatePresence) so useInView works reliably */}
+        <div ref={gridWrapperRef}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={tabKey}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {filtered.length > 0 ? (
+                <motion.div
+                  className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 3xl:grid-cols-8 gap-2.5 sm:gap-3 md:gap-4"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="show"
+                >
+                  {filtered.map((skill, i) => (
+                    <SkillCard
+                      key={`${tabKey}-${skill.name}`}
+                      name={skill.name}
+                      pct={skill.pct}
+                      index={i}
+                      glow={skill.glow}
+                      textColor={skill.textColor}
+                      barColor={skill.barColor}
+                      isVisible={gridInView}
+                    />
+                  ))}
+                </motion.div>
+              ) : (
+                <p className="text-center text-sm text-navy-400 py-12">No skills in this category.</p>
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </section>
   );
