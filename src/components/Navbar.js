@@ -49,9 +49,7 @@ export default function Navbar() {
             to="/"
             className="flex items-center gap-2 font-bold text-sm text-navy-800 dark:text-white transition-colors"
           >
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#191E38] text-white text-xs font-bold leading-none">
-              H<span className="text-[#facc15]">A</span>
-            </span>
+            <img src="/favicon.svg" alt="HA" className="w-8 h-8 rounded-lg" />
             <span className="font-mono text-sm">
               <span className="text-brand-500">$</span> java.dev
             </span>

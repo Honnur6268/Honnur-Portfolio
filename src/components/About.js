@@ -81,12 +81,12 @@ export default function About() {
           >
             <div className="relative">
               <motion.div
-                className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 2xl:w-72 2xl:h-72 rounded-2xl bg-gradient-to-br from-brand-400 via-brand-500 to-brand-600 flex items-center justify-center text-white text-5xl sm:text-6xl 2xl:text-7xl font-bold shadow-2xl shadow-brand-500/20 dark:shadow-brand-500/10"
+                className="w-44 h-44 sm:w-52 sm:h-52 md:w-60 md:h-60 2xl:w-72 2xl:h-72 rounded-2xl overflow-hidden shadow-2xl shadow-brand-500/20 dark:shadow-brand-500/10"
                 style={{ y: avatarY, rotate: avatarRotate }}
                 whileHover={{ scale: 1.04, boxShadow: '0 24px 50px -12px rgba(234, 179, 8, 0.25)' }}
                 transition={{ type: 'spring', stiffness: 200, damping: 18 }}
               >
-                HA
+                <img src="/favicon.svg" alt="HA" className="w-full h-full" />
               </motion.div>
               {/* Decorative ring */}
               <motion.div

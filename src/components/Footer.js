@@ -7,9 +7,7 @@ export default function Footer() {
     <footer className="py-6 sm:py-8 border-t border-navy-100 dark:border-navy-800/50 bg-white dark:bg-navy-900">
       <div className="mx-auto max-w-6xl 2xl:max-w-7xl 3xl:max-w-8xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
         <span className="font-mono text-[11px] sm:text-xs text-navy-400 flex items-center gap-1.5">
-          <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-[#191E38] text-white text-[8px] font-bold leading-none">
-            H<span className="text-[#facc15]">A</span>
-          </span>
+          <img src="/favicon.svg" alt="HA" className="w-5 h-5 rounded" />
           java.dev &mdash; built with
           <motion.span
             animate={{ scale: [1, 1.2, 1] }}
