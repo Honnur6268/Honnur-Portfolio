@@ -24,18 +24,14 @@ export default function ResumeButton() {
   const handleClick = useCallback(() => {
     if (state !== 'idle') return;
 
-    setState('downloading');
-
-    setTimeout(() => {
-      try {
-        window.open(profile.resumeUrl, '_blank', 'noopener,noreferrer');
-        setState('success');
-        setTimeout(() => setState('idle'), 2500);
-      } catch {
-        setState('error');
-        setTimeout(() => setState('idle'), 3000);
-      }
-    }, 700);
+    try {
+      window.open(profile.resumeUrl, '_blank', 'noopener,noreferrer');
+      setState('success');
+      setTimeout(() => setState('idle'), 2500);
+    } catch {
+      setState('error');
+      setTimeout(() => setState('idle'), 3000);
+    }
   }, [state]);
 
   const isDownloading = state === 'downloading';

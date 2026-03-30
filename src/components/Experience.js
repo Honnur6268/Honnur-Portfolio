@@ -6,7 +6,7 @@ import { experiences } from '../data/portfolioData';
 
 export default function Experience() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   const { scrollYProgress } = useScroll({
     target: ref,

@@ -6,9 +6,9 @@ import { fadeLeft, fadeRight } from '../utils/animations';
 import SectionHeading from './SectionHeading';
 import { profile } from '../data/portfolioData';
 
-const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID || 'service_honnu6268';
-const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID || 'template_yzswriw';
-const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY || '5-6_R2nmtNxWkQGiX';
+const EMAILJS_SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const EMAILJS_TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+const EMAILJS_PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
 const autoCompleteMap = { name: 'name', email: 'email' };
 
@@ -22,6 +22,7 @@ function FloatField({ label, name, type = 'text', value, onChange, textarea, del
       transition={{ delay, duration: 0.45 }}
     >
       <Tag
+        id={name}
         type={textarea ? undefined : type}
         name={name}
         value={value}
@@ -36,7 +37,7 @@ function FloatField({ label, name, type = 'text', value, onChange, textarea, del
             : 'border-navy-200 dark:border-navy-700/50 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 dark:focus:ring-brand-500/20'
         }`}
       />
-      <label>{label}</label>
+      <label htmlFor={name}>{label}</label>
       {error && (
         <motion.p
           initial={{ opacity: 0, y: -4 }}
@@ -69,7 +70,7 @@ function validateForm({ name, email, message }) {
 export default function Contact() {
   const ref = useRef(null);
   const formRef = useRef(null);
-  const inView = useInView(ref, { once: false, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: '-60px' });
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState('idle'); // idle | sending | sent | error

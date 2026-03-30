@@ -24,12 +24,9 @@ export default function BackToTop() {
           className="fixed bottom-8 right-8 z-50 w-11 h-11 rounded-full bg-brand-500 text-white shadow-lg shadow-brand-500/25 flex items-center justify-center"
           aria-label="Back to top"
         >
-          <motion.span
-            animate={{ y: [0, -2, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
+          <span className="animate-bounce-gentle inline-flex">
             <FiArrowUp size={18} />
-          </motion.span>
+          </span>
         </motion.button>
       )}
     </AnimatePresence>

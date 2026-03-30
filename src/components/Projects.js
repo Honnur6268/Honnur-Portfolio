@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiBriefcase, FiCode, FiX, FiZap, FiArrowRight } from 'react-icons/fi';
 import SectionHeading from './SectionHeading';
@@ -28,10 +28,37 @@ const cardVariants = {
 
 /* ─── Detail Modal ─── */
 function ProjectModal({ project, index, onClose }) {
+  const modalRef = useRef(null);
+
   useEffect(() => {
     const handleEsc = (e) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', handleEsc);
     document.body.style.overflow = 'hidden';
+
+    // Focus trap
+    const modal = modalRef.current;
+    if (modal) {
+      const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      first?.focus();
+
+      const trapFocus = (e) => {
+        if (e.key !== 'Tab') return;
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last?.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first?.focus(); }
+        }
+      };
+      modal.addEventListener('keydown', trapFocus);
+      return () => {
+        document.removeEventListener('keydown', handleEsc);
+        document.body.style.overflow = '';
+        modal.removeEventListener('keydown', trapFocus);
+      };
+    }
+
     return () => {
       document.removeEventListener('keydown', handleEsc);
       document.body.style.overflow = '';
@@ -60,8 +87,10 @@ function ProjectModal({ project, index, onClose }) {
       />
 
       <motion.div
+        ref={modalRef}
         role="dialog"
         aria-label={title}
+        aria-modal="true"
         className="relative w-full max-w-lg max-h-[80vh] overflow-y-auto rounded-2xl border border-navy-200/60 dark:border-navy-700/40 bg-white dark:bg-navy-800/95 shadow-2xl shadow-black/10 custom-scrollbar"
         initial={{ opacity: 0, scale: 0.93, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}

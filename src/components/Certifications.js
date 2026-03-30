@@ -67,7 +67,7 @@ function CertCard({ item, index, inView }) {
 
 export default function Certifications() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: false, margin: '-60px' });
+  const inView = useInView(ref, { once: true, margin: '-60px' });
 
   const allItems = [{ ...internship }, ...certifications];
 
@@ -88,15 +88,13 @@ export default function Certifications() {
           { Icon: FiCloud, x: '88%', y: '22%', size: 20, color: 'text-cyan-400/12 dark:text-cyan-400/6' },
           { Icon: FaJava, x: '90%', y: '72%', size: 22, color: 'text-orange-400/12 dark:text-orange-400/6' },
         ].map(({ Icon, x, y, size, color }, i) => (
-          <motion.div
+          <div
             key={i}
-            className={`absolute ${color} hidden sm:block`}
-            style={{ left: x, top: y }}
-            animate={{ y: [0, -(8 + i * 3), 0], opacity: [0.5, 0.8, 0.5] }}
-            transition={{ duration: 7 + i * 2, repeat: Infinity, ease: 'easeInOut', delay: i * 0.8 }}
+            className={`absolute ${color} hidden sm:block animate-float`}
+            style={{ left: x, top: y, animationDuration: `${7 + i * 2}s`, animationDelay: `${i * 0.8}s` }}
           >
             <Icon size={size} />
-          </motion.div>
+          </div>
         ))}
       </div>
 

@@ -290,7 +290,7 @@
   border-radius: 50%;
   filter: blur(80px);
   animation: glowPulse 8s ease-in-out infinite;
-  will-change: opacity, transform;
+  /* will-change removed — permanent GPU layers waste memory */
 }
 
 /* Slow orbiting accent dot */

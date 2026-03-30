@@ -142,7 +142,7 @@ export default function Achievements() {
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: false, margin: '-60px' }}
+          viewport={{ once: true, margin: '-60px' }}
         >
           {achievements.map((item) => (
             <AchievementCard key={item.title} item={item} />

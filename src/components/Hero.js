@@ -176,12 +176,12 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2 + delay * 0.25, duration: 0.5 }}
           >
-            <motion.div
-              animate={{ y: [0, -(6 + i), 0] }}
-              transition={{ duration: 8 + i * 2, repeat: Infinity, ease: 'easeInOut' }}
+            <div
+              className="animate-float"
+              style={{ animationDuration: `${8 + i * 2}s`, animationDelay: `${i * 0.5}s` }}
             >
               <Icon size={size} />
-            </motion.div>
+            </div>
           </motion.div>
         ))}
 

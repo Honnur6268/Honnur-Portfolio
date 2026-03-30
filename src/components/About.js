@@ -17,20 +17,20 @@ const strengths = [
   { title: 'System Design', desc: 'Scalable & fault-tolerant designs' },
 ];
 
-function Stat({ value, label }) {
+function Stat({ value, label, delay = 0 }) {
   const suffix = value.replace(/[0-9]/g, '');
-  const [ref, count] = useAnimatedCounter(parseInt(value, 10));
+  const [ref, count] = useAnimatedCounter(parseInt(value, 10), 700, delay);
   return (
     <motion.div
       ref={ref}
-      className="text-center p-4 sm:p-5 2xl:p-6 rounded-xl border border-navy-200/50 dark:border-navy-700/30 bg-white/50 dark:bg-navy-800/40 hover-glow"
-      whileHover={{ y: -6, scale: 1.05 }}
+      className="flex flex-col items-center justify-center text-center p-5 sm:p-6 2xl:p-8 rounded-xl border border-navy-200/50 dark:border-navy-700/30 bg-white/50 dark:bg-navy-800/40 hover-glow h-full"
+      whileHover={{ y: -6, boxShadow: '0 16px 40px -10px rgba(234, 179, 8, 0.18)' }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}
     >
-      <span className="text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl font-bold text-navy-900 dark:text-white">
+      <span className="text-3xl sm:text-4xl md:text-5xl 2xl:text-[3.5rem] font-bold text-navy-900 dark:text-white leading-none">
         {count}<span className="text-gradient">{suffix}</span>
       </span>
-      <p className="mt-1 text-xs sm:text-sm text-navy-400 font-medium">{label}</p>
+      <p className="mt-2 text-xs sm:text-sm text-navy-400 font-medium leading-snug">{label}</p>
     </motion.div>
   );
 }
@@ -90,28 +90,22 @@ export default function About() {
               </motion.div>
               {/* Decorative ring */}
               <motion.div
-                className="absolute -inset-4 rounded-2xl border-2 border-dashed border-brand-300/25 dark:border-brand-500/15"
+                className="absolute -inset-4 rounded-2xl border-2 border-dashed border-brand-300/25 dark:border-brand-500/15 animate-spin-slower"
                 style={{ rotate: useTransform(scrollYProgress, [0, 1], [-5, 5]), scale: decorScale }}
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
               />
               {/* Floating badges */}
-              <motion.div
-                className="absolute -bottom-3 -right-4 px-3 py-1.5 rounded-xl bg-white dark:bg-navy-800 shadow-xl dark:shadow-black/30 border border-navy-100 dark:border-navy-700/50 text-[11px] font-bold text-brand-600 dark:text-brand-400"
-                animate={{ y: [-4, 6, -4] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
-                whileHover={{ scale: 1.15 }}
+              <div
+                className="absolute -bottom-3 -right-4 px-3 py-1.5 rounded-xl bg-white dark:bg-navy-800 shadow-xl dark:shadow-black/30 border border-navy-100 dark:border-navy-700/50 text-[11px] font-bold text-brand-600 dark:text-brand-400 animate-float hover:scale-110 transition-transform"
+                style={{ animationDuration: '3.5s' }}
               >
                 4+ yrs exp
-              </motion.div>
-              <motion.div
-                className="absolute -top-3 -left-4 px-3 py-1.5 rounded-xl bg-white dark:bg-navy-800 shadow-xl dark:shadow-black/30 border border-navy-100 dark:border-navy-700/50 text-[10px] font-bold text-emerald-500 dark:text-accent-green"
-                animate={{ y: [4, -5, 4] }}
-                transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                whileHover={{ scale: 1.15 }}
+              </div>
+              <div
+                className="absolute -top-3 -left-4 px-3 py-1.5 rounded-xl bg-white dark:bg-navy-800 shadow-xl dark:shadow-black/30 border border-navy-100 dark:border-navy-700/50 text-[10px] font-bold text-emerald-500 dark:text-accent-green animate-float-reverse hover:scale-110 transition-transform"
+                style={{ animationDuration: '4s' }}
               >
                 5+ projects
-              </motion.div>
+              </div>
             </div>
           </motion.div>
 
@@ -155,14 +149,14 @@ export default function About() {
 
         {/* Stats */}
         <motion.div
-          className="mt-14 sm:mt-20 grid grid-cols-3 gap-3 sm:gap-4 md:gap-6 max-w-md sm:max-w-xl 2xl:max-w-2xl mx-auto"
+          className="mt-14 sm:mt-20 grid grid-cols-3 gap-3 sm:gap-5 md:gap-6 max-w-md sm:max-w-xl 2xl:max-w-2xl mx-auto auto-rows-fr"
           initial="hidden"
           animate={inView ? 'show' : 'hidden'}
-          variants={stagger(0.12, 0.7)}
+          variants={stagger(0.08, 0.15)}
         >
-          {profile.stats.map(({ value, label }) => (
-            <motion.div key={label} variants={staggerScaleChild}>
-              <Stat value={value} label={label} />
+          {profile.stats.map(({ value, label }, i) => (
+            <motion.div key={label} variants={staggerScaleChild} className="h-full">
+              <Stat value={value} label={label} delay={100 + i * 80} />
             </motion.div>
           ))}
         </motion.div>

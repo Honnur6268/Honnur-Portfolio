@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
@@ -18,11 +18,47 @@ const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
 const ContactPage = lazy(() => import('./pages/ContactPage'));
 
+function AppContent() {
+  const { pathname } = useLocation();
+  const isHome = pathname === '/';
+
+  return (
+    <>
+      {isHome && <ParticleField />}
+      {isHome && <MouseGlow />}
+      <ScrollProgress />
+      <BackToTop />
+      <ScrollToTop />
+
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-semibold"
+      >
+        Skip to content
+      </a>
+
+      <Navbar />
+      <main id="main-content" className="relative z-[2]">
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
 export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1600);
+    const t = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(t);
   }, []);
 
@@ -40,24 +76,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <ParticleField />
-              <MouseGlow />
-              <ScrollProgress />
-              <BackToTop />
-              <ScrollToTop />
-
-              <Navbar />
-              <main className="relative z-[2]">
-                <Suspense fallback={null}>
-                  <Routes>
-                    <Route path="/" element={<HomePage />} />
-                    <Route path="/about" element={<AboutPage />} />
-                    <Route path="/projects" element={<ProjectsPage />} />
-                    <Route path="/contact" element={<ContactPage />} />
-                  </Routes>
-                </Suspense>
-              </main>
-              <Footer />
+              <AppContent />
             </motion.div>
           )}
           <SpeedInsights />
