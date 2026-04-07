@@ -38,7 +38,7 @@ function AppContent() {
       </a>
 
       <Navbar />
-      <main id="main-content" className="relative z-[2]">
+      <main id="main-content" className="relative z-[2] min-h-screen">
         <Suspense fallback={null}>
           <Routes>
             <Route path="/" element={<HomePage />} />
@@ -58,7 +58,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 800);
+    const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
 

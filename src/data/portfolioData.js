@@ -43,10 +43,10 @@ export const skills = [
   {
     category: 'DevOps',
     items: [
-      { name: 'Docker', pct: 85 },
-      { name: 'Kubernetes', pct: 75 },
-      {name: 'Jenkins', pct: 70 },
-      { name: 'AWS', pct: 78 },
+      { name: 'Docker', pct: 65 },
+      { name: 'Kubernetes', pct: 65 },
+      {name: 'Jenkins', pct: 65 },
+      { name: 'AWS', pct: 50 },
     ],
   },
   {
@@ -61,10 +61,10 @@ export const skills = [
 
 export const workProjects = [
   {
-    title: 'UPI Merchant Acquirer Switch',
-    impact: 'Handles 100K+ daily UPI transactions with real-time routing',
+    title: 'UPI Switch - Merchant Acquirer',
+    impact: 'Handles 10K+ daily UPI transactions with real-time routing',
     current: true,
-    tech: ['Java', 'Spring Boot', 'Kafka', 'Redis'],
+    tech: ['Java', 'Spring Boot', 'MongoDB', 'Kafka', 'Redis'],
     contributions: [
       'Built merchant routing logic for transaction switching',
       'Implemented validation and processing pipelines',
@@ -75,7 +75,7 @@ export const workProjects = [
     title: 'Merchant Management System',
     impact: 'Achieved 3x faster response times with Rust backend',
     current: true,
-    tech: ['Rust', 'Cargo'],
+    tech: ['Rust', 'Cargo', 'MongoDB',],
     contributions: [
       'Developed secure APIs in Rust for merchant operations',
       'Implemented business logic for merchant lifecycle',
@@ -84,12 +84,12 @@ export const workProjects = [
   },
   {
     title: 'Perkle Voucher System',
-    impact: 'Enabled 50K+ voucher redemptions per month',
+    impact: 'Enabled 5K+ voucher redemptions per month',
     tech: ['Java', 'Spring Boot', 'MongoDB', 'REST APIs'],
     contributions: [
-      'Built voucher generation and redemption APIs',
+      'Built voucher adding from vendors and buying APIs',
       'Designed scalable backend logic for high-volume processing',
-      'Integrated vendor-based mapping for multi-tenant support',
+      'Integrated vendor-based vochers in the system',
     ],
   },
   {
@@ -98,7 +98,7 @@ export const workProjects = [
     tech: ['Java', 'Spring Boot', 'REST APIs'],
     contributions: [
       'Implemented validation logic for virtual account numbers',
-      'Built transaction verification pipelines',
+      'Implemented validate and notify APIs for real-time VAN verification',
       'Ensured secure API processing with error handling',
     ],
   },
@@ -107,11 +107,11 @@ export const workProjects = [
 export const personalProjects = [
   {
     title: 'Online Reservation System',
-    impact: 'End-to-end booking platform with payment integration',
+    impact: 'End-to-end booking platform',
     tech: ['Java', 'JSP', 'Servlets', 'JSTL', 'MySQL'],
     contributions: [
       'Online ticket booking with seat selection',
-      'Payment gateway integration (Debit card & Net banking)',
+      'Implemented ticket display and downloading APIs',
       'User authentication and booking history',
     ],
   },
@@ -119,12 +119,12 @@ export const personalProjects = [
 
 export const academicProjects = [
   {
-    title: 'IoT Fall Detection System',
+    title: 'IoT Fall Detection System for Elderly People',
     impact: 'Real-time fall detection with instant emergency alerts',
     tech: ['Arduino', 'Accelerometer', 'Gyroscope', 'Firebase'],
     contributions: [
       'Real-time fall detection using sensor data',
-      'Emergency notification to predefined contacts',
+      'Emergency notification and call to predefined contacts',
       'Firebase integration for data storage and alerts',
     ],
   },
@@ -136,9 +136,11 @@ export const experiences = [
     company: 'Neokred Technologies Private Limited',
     period: 'Nov 2023 – Present',
     items: [
-      'Developed microservices for order management with Spring Boot and JPA',
-      'Implemented Redis caching layer reducing p95 latency by 60%',
-      'Set up CI/CD pipelines with Jenkins, Docker, and automated test suites',
+      'Implemented UPI Switch - Merchant Acquirer system handling 10K+ daily transactions',
+      'Implemented Van Validation system for Equitas Bank to securly validate virtual account numbers in real-time',
+      'Implemented secure APIs for a Rust-based Merchant Management System improving performance by 3x',
+      'Implemented Perkle Voucher System',
+      'Implemented Redis caching layer and Kafka-based publish-subscribe pipelines',
       'Collaborated in Agile sprints delivering features on 2-week cadence',
     ],
   },
@@ -147,10 +149,9 @@ export const experiences = [
     company: 'Axya Digital Private Limited',
     period: 'Aug 2022 – Jul 2023',
     items: [
-      'Developed microservices for order management with Spring Boot and JPA',
-      'Implemented Redis caching layer reducing p95 latency by 60%',
-      'Set up CI/CD pipelines with Jenkins, Docker, and automated test suites',
-      'Collaborated in Agile sprints delivering features on 2-week cadence',
+      'Completed Java Microservices certification with AXYYA Digital',
+      'Designed and implemented Flight Management System with Spring Boot and MySQL as a training project',
+      'Worked on internal Resource Requisition System with Java, Spring Boot and ReactJS',
     ],
   },
   {
@@ -158,11 +159,9 @@ export const experiences = [
     company: 'Virtusa Consulting Services Private Limited',
     period: 'May 2021 – Aug 2022',
     items: [
-      'Designed and built scalable backend APIs processing 100K+ daily transactions',
-      'Implemented Kafka-based asynchronous event pipelines with DLQ retry patterns',
-      'Architected microservice decomposition for a monolithic payment system',
-      'Built UPI payment switch handling real-time transaction routing',
-      'Led code reviews and mentored 3 junior engineers on Spring Boot best practices',
+      'Completed Training in Java, Hiberante, Spring Boot, Microservices, REST APIs',
+      'Designed and Implemented a Smart Bank System as a training project',
+      'Achieved Oracle Certified Associate - Java SE 8 Programmer certification',
     ],
   }
 ];
