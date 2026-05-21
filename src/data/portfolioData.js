@@ -6,7 +6,7 @@ export const profile = {
   location: 'Bengaluru, India',
   github: 'https://github.com/Honnur6268',
   linkedin: 'https://www.linkedin.com/in/honnur-ali',
-  resumeUrl: 'https://honnur-portfolio-bucket.s3.ap-south-1.amazonaws.com/Honnur_Ali_4.5years_CV.pdf',
+  resumeUrl: 'https://honnur-portfolio-bucket.s3.ap-south-1.amazonaws.com/Honnur_Ali_Java_Developer_4.5Years.pdf',
   about: `Backend engineer with 4+ years of experience building production-grade distributed systems.
 I specialize in Java and Spring Boot ecosystems — designing microservices, event-driven architectures
 with Kafka, and deploying cloud-native applications on AWS. I care deeply about clean architecture,
